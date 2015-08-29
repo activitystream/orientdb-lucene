@@ -26,9 +26,15 @@ import com.orientechnologies.orient.core.id.ORID;
 import com.orientechnologies.orient.core.id.ORecordId;
 import com.orientechnologies.orient.core.index.OCompositeKey;
 import com.orientechnologies.orient.core.index.OIndexCursor;
+import com.orientechnologies.orient.core.index.OIndexDefinition;
 import com.orientechnologies.orient.core.index.OIndexKeyCursor;
 import com.orientechnologies.orient.core.metadata.schema.OType;
 import com.orientechnologies.orient.core.record.impl.ODocument;
+//import com.spatial4j.core.context.SpatialContext;
+//import com.spatial4j.core.distance.DistanceUtils;
+//import com.spatial4j.core.shape.Point;
+//import com.spatial4j.core.shape.Shape;
+import com.orientechnologies.orient.core.serialization.serializer.stream.OStreamSerializer;
 import com.spatial4j.core.context.SpatialContext;
 import com.spatial4j.core.distance.DistanceUtils;
 import com.spatial4j.core.shape.Point;
@@ -49,6 +55,12 @@ import org.apache.lucene.search.MatchAllDocsQuery;
 import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.Sort;
 import org.apache.lucene.search.TopDocs;
+//import org.apache.lucene.spatial.SpatialStrategy;
+//import org.apache.lucene.spatial.prefix.RecursivePrefixTreeStrategy;
+//import org.apache.lucene.spatial.prefix.tree.GeohashPrefixTree;
+//import org.apache.lucene.spatial.prefix.tree.SpatialPrefixTree;
+//import org.apache.lucene.spatial.query.SpatialArgs;
+//import org.apache.lucene.spatial.query.SpatialOperation;
 import org.apache.lucene.spatial.SpatialStrategy;
 import org.apache.lucene.spatial.prefix.RecursivePrefixTreeStrategy;
 import org.apache.lucene.spatial.prefix.tree.GeohashPrefixTree;
@@ -66,8 +78,8 @@ import java.util.Set;
 public class OLuceneSpatialIndexManager extends OLuceneIndexManagerAbstract {
 
   private final OShapeFactory factory;
-  private SpatialContext      ctx;
-  private SpatialStrategy     strategy;
+  private SpatialContext ctx;
+  private SpatialStrategy strategy;
 
   public OLuceneSpatialIndexManager(OShapeFactory factory) {
     super();
@@ -77,11 +89,20 @@ public class OLuceneSpatialIndexManager extends OLuceneIndexManagerAbstract {
     this.strategy = new RecursivePrefixTreeStrategy(grid, "location");
   }
 
+  public void create(OIndexDefinition indexDefinition, String clusterIndexName, OStreamSerializer valueSerializer, boolean isAutomatic) {
+    super.create("some", indexDefinition, clusterIndexName, valueSerializer, isAutomatic);
+    //todo - name is missing
+  }
+
+  public int getVersion() {
+    return 0;
+  }
+
   @Override
   public IndexWriter openIndexWriter(Directory directory, ODocument metadata) throws IOException {
     Analyzer analyzer = getAnalyzer(metadata);
     Version version = getVersion(metadata);
-    IndexWriterConfig iwc = new IndexWriterConfig(version, analyzer);
+    IndexWriterConfig iwc = new IndexWriterConfig(analyzer);
     iwc.setOpenMode(IndexWriterConfig.OpenMode.CREATE_OR_APPEND);
     return new IndexWriter(directory, iwc);
   }
@@ -90,37 +111,31 @@ public class OLuceneSpatialIndexManager extends OLuceneIndexManagerAbstract {
   public IndexWriter createIndexWriter(Directory directory, ODocument metadata) throws IOException {
     Analyzer analyzer = getAnalyzer(metadata);
     Version version = getVersion(metadata);
-    IndexWriterConfig iwc = new IndexWriterConfig(version, analyzer);
+    IndexWriterConfig iwc = new IndexWriterConfig(analyzer);
     iwc.setOpenMode(IndexWriterConfig.OpenMode.CREATE_OR_APPEND);
     return new IndexWriter(directory, iwc);
   }
 
-  @Override
   public void init() {
 
   }
 
-  @Override
   public void deleteWithoutLoad(String indexName) {
 
   }
 
-  @Override
   public boolean contains(Object key) {
     return false;
   }
 
-  @Override
   public boolean remove(Object key) {
     return false;
   }
 
-  @Override
   public ORID getIdentity() {
     return null;
   }
 
-  @Override
   public Object get(Object key) {
     try {
       if (key instanceof OSpatialCompositeKey) {
@@ -210,7 +225,6 @@ public class OLuceneSpatialIndexManager extends OLuceneIndexManagerAbstract {
     return result;
   }
 
-  @Override
   public void put(Object key, Object value) {
 
     OCompositeKey compositeKey = (OCompositeKey) key;
@@ -222,43 +236,35 @@ public class OLuceneSpatialIndexManager extends OLuceneIndexManagerAbstract {
     }
   }
 
-  @Override
   public Object getFirstKey() {
     return null;
   }
 
-  @Override
   public Object getLastKey() {
     return null;
   }
 
-  @Override
   public OIndexCursor iterateEntriesBetween(Object rangeFrom, boolean fromInclusive, Object rangeTo, boolean toInclusive,
       boolean ascSortOrder, ValuesTransformer transformer) {
     return null;
   }
 
-  @Override
   public OIndexCursor iterateEntriesMajor(Object fromKey, boolean isInclusive, boolean ascSortOrder, ValuesTransformer transformer) {
     return null;
   }
 
-  @Override
   public OIndexCursor iterateEntriesMinor(Object toKey, boolean isInclusive, boolean ascSortOrder, ValuesTransformer transformer) {
     return null;
   }
 
-  @Override
   public OIndexCursor cursor(ValuesTransformer valuesTransformer) {
     return null;
   }
 
-  @Override
   public OIndexKeyCursor keyCursor() {
     return null;
   }
 
-  @Override
   public boolean hasRangeQuerySupport() {
     return false;
   }
@@ -266,7 +272,7 @@ public class OLuceneSpatialIndexManager extends OLuceneIndexManagerAbstract {
   private Document newGeoDocument(String rid, Shape shape) {
 
     FieldType ft = new FieldType();
-    ft.setIndexed(true);
+    //ft.setIIndexed(true);
     ft.setStored(true);
 
     Document doc = new Document();

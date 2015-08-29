@@ -19,9 +19,6 @@ package com.orientechnologies.lucene;
 import java.util.Date;
 
 import com.orientechnologies.orient.core.index.OCompositeKey;
-import com.spatial4j.core.context.SpatialContext;
-import com.spatial4j.core.distance.DistanceUtils;
-import com.spatial4j.core.shape.Point;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.document.*;
 import org.apache.lucene.index.Term;
@@ -29,9 +26,6 @@ import org.apache.lucene.queryparser.classic.MultiFieldQueryParser;
 import org.apache.lucene.queryparser.classic.ParseException;
 import org.apache.lucene.queryparser.classic.QueryParser;
 import org.apache.lucene.search.*;
-import org.apache.lucene.spatial.SpatialStrategy;
-import org.apache.lucene.spatial.query.SpatialArgs;
-import org.apache.lucene.spatial.query.SpatialOperation;
 import org.apache.lucene.util.Version;
 
 import com.orientechnologies.lucene.manager.OLuceneIndexManagerAbstract;
@@ -117,10 +111,10 @@ public class OLuceneIndexType {
       throws ParseException {
     QueryParser queryParser;
     if ((key).startsWith("(")) {
-      queryParser = new QueryParser(version, "", analyzer);
+      queryParser = new QueryParser("", analyzer);
 
     } else {
-      queryParser = new MultiFieldQueryParser(version, index.getFields().toArray(new String[index.getFields().size()]), analyzer);
+      queryParser = new MultiFieldQueryParser(index.getFields().toArray(new String[index.getFields().size()]), analyzer);
     }
 
     return queryParser.parse(key);

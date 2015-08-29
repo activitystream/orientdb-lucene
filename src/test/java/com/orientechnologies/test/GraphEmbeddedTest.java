@@ -57,6 +57,7 @@ public class GraphEmbeddedTest extends BaseLuceneTest {
     type.createProperty("name", OType.STRING);
 
     databaseDocumentTx.command(new OCommandSQL("create index City.name on City (name) FULLTEXT ENGINE LUCENE")).execute();
+    //todo - it seems this is executed twice and that a lock can not be aquired the second time
 
   }
 

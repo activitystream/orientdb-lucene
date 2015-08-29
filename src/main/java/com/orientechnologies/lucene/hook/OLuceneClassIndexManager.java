@@ -35,7 +35,6 @@ import static com.orientechnologies.orient.core.hook.ORecordHook.TYPE.BEFORE_UPD
 
 public class OLuceneClassIndexManager extends ODocumentHookAbstract implements ODatabaseLifecycleListener {
 
-  @Override
   public DISTRIBUTED_EXECUTION_MODE getDistributedExecutionMode() {
     return DISTRIBUTED_EXECUTION_MODE.TARGET_NODE;
   }
@@ -44,6 +43,10 @@ public class OLuceneClassIndexManager extends ODocumentHookAbstract implements O
   public RESULT onRecordBeforeCreate(ODocument iDocument) {
     checkIndexes(iDocument, BEFORE_CREATE);
     return RESULT.RECORD_NOT_CHANGED;
+  }
+
+  public void onDrop(ODatabaseInternal iDatabase) {
+    //todo - what to do here?
   }
 
   @Override
@@ -492,32 +495,26 @@ public class OLuceneClassIndexManager extends ODocumentHookAbstract implements O
     return iRecord;
   }
 
-  @Override
   public PRIORITY getPriority() {
     return null;
   }
 
-  @Override
   public void onCreate(ODatabaseInternal iDatabase) {
 
   }
 
-  @Override
   public void onOpen(ODatabaseInternal iDatabase) {
 
   }
 
-  @Override
   public void onClose(ODatabaseInternal iDatabase) {
 
   }
 
-  @Override
   public void onCreateClass(ODatabaseInternal iDatabase, OClass iClass) {
 
   }
 
-  @Override
   public void onDropClass(ODatabaseInternal iDatabase, OClass iClass) {
 
   }

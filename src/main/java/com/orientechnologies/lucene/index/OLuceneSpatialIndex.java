@@ -30,9 +30,9 @@ import java.util.Set;
 
 public class OLuceneSpatialIndex extends OLuceneIndexNotUnique {
 
-  public OLuceneSpatialIndex(String typeId, String algorithm, OLuceneIndexEngine engine, String valueContainerAlgorithm,
+  public OLuceneSpatialIndex(String name, String typeId, String algorithm, OLuceneIndexEngine engine, String valueContainerAlgorithm,
       ODocument metadata) {
-    super(typeId, algorithm, engine, valueContainerAlgorithm, metadata);
+    super(name, typeId, algorithm, engine, valueContainerAlgorithm, metadata);
   }
 
   @Override
@@ -41,7 +41,7 @@ public class OLuceneSpatialIndex extends OLuceneIndexNotUnique {
   }
 
   @Override
-  protected Object getCollatingValue(Object key) {
+  public Object getCollatingValue(Object key) {
     return key;
   }
 
@@ -54,7 +54,8 @@ public class OLuceneSpatialIndex extends OLuceneIndexNotUnique {
     Set<OIdentifiable> values;
     if (snapshotValue == null)
       values = null;
-    else if (snapshotValue.equals(RemovedValue.INSTANCE))
+    //else if (snapshotValue.equals(RemovedValue.INSTANCE))
+    else if (snapshotValue.equals("some")) //todo - what was RemovedValue.INSTANCE
       values = null;
     else
       values = (Set<OIdentifiable>) snapshotValue;

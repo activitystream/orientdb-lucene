@@ -27,7 +27,7 @@ import java.util.Collection;
 import java.util.List;
 
 public class ORectangleShapeFactory implements OShapeFactory {
-  @Override
+
   public Shape makeShape(OCompositeKey key, SpatialContext ctx) {
 
     Point[] points = new Point[2];
@@ -42,7 +42,6 @@ public class ORectangleShapeFactory implements OShapeFactory {
     return ctx.makeRectangle(points[0], points[1]);
   }
 
-  @Override
   public boolean canHandle(OCompositeKey key) {
     boolean canHandle = key.getKeys().size() == 2;
     for (Object o : key.getKeys()) {

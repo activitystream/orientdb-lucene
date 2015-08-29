@@ -36,9 +36,8 @@ import com.orientechnologies.orient.core.type.tree.OMVRBTreeRIDSet;
 
 public class OLuceneIndexNotUnique extends OIndexNotUnique implements OLuceneIndex {
 
-  public OLuceneIndexNotUnique(String typeId, String algorithm, OLuceneIndexEngine engine, String valueContainerAlgorithm,
-      ODocument metadata) {
-    super(typeId, algorithm, engine, valueContainerAlgorithm, metadata);
+  public OLuceneIndexNotUnique(String name, String typeId, String algorithm, OLuceneIndexEngine engine, String valueContainerAlgorithm, ODocument metadata) {
+    super(name, typeId, algorithm, engine, valueContainerAlgorithm, metadata);
   }
 
   @Override

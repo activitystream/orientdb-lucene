@@ -55,29 +55,29 @@ public class OLuceneIndexFactory implements OIndexFactory {
   public OLuceneIndexFactory() {
   }
 
-  @Override
+  public int getLastVersion() {
+    return 0;
+  }
+
+  public OIndexInternal<?> createIndex(String name, ODatabaseDocumentInternal oDatabaseRecord, String indexType, String algorithm, String valueContainerAlgorithm, ODocument metadata, int version) throws OConfigurationException {
+    return this.createLuceneIndex(name, oDatabaseRecord, indexType, valueContainerAlgorithm, metadata);
+  }
+
   public Set<String> getTypes() {
     return TYPES;
   }
 
-  @Override
   public Set<String> getAlgorithms() {
     return ALGORITHMS;
   }
 
-  @Override
-  public OIndexInternal<?> createIndex(ODatabaseDocumentInternal oDatabaseRecord, String indexType, String algorithm,
-      String valueContainerAlgorithm, ODocument metadata) throws OConfigurationException {
-    return createLuceneIndex(oDatabaseRecord, indexType, valueContainerAlgorithm, metadata);
-  }
-
-  private OIndexInternal<?> createLuceneIndex(ODatabaseDocumentInternal oDatabaseRecord, String indexType,
+  private OIndexInternal<?> createLuceneIndex(String name, ODatabaseDocumentInternal oDatabaseRecord, String indexType,
       String valueContainerAlgorithm, ODocument metadata) {
     if (OClass.INDEX_TYPE.FULLTEXT.toString().equals(indexType)) {
-      return new OLuceneFullTextIndex(indexType, LUCENE_ALGORITHM, new OLuceneIndexEngine<Set<OIdentifiable>>(
+      return new OLuceneFullTextIndex(name, indexType, LUCENE_ALGORITHM, new OLuceneIndexEngine<Set<OIdentifiable>>(
           new OLuceneFullTextIndexManager(), indexType), valueContainerAlgorithm, metadata);
     } else if (OClass.INDEX_TYPE.SPATIAL.toString().equals(indexType)) {
-      return new OLuceneSpatialIndex(indexType, LUCENE_ALGORITHM, new OLuceneIndexEngine<Set<OIdentifiable>>(
+      return new OLuceneSpatialIndex(name, indexType, LUCENE_ALGORITHM, new OLuceneIndexEngine<Set<OIdentifiable>>(
           new OLuceneSpatialIndexManager(new OShapeFactoryImpl()), indexType), valueContainerAlgorithm, metadata);
     }
     throw new OConfigurationException("Unsupported type : " + indexType);

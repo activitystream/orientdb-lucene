@@ -18,7 +18,8 @@
 
 package com.orientechnologies.test;
 
-import com.orientechnologies.orient.core.OOrientListenerAbstract;
+//import com.orientechnologies.orient.core.OOrientListenerAbstract;
+import com.orientechnologies.orient.core.OOrientListener;
 import com.orientechnologies.orient.core.Orient;
 import com.orientechnologies.orient.core.db.document.ODatabaseDocument;
 import com.orientechnologies.orient.core.db.document.ODatabaseDocumentTx;
@@ -64,22 +65,19 @@ public abstract class BaseLuceneTest {
         }
         db.create();
 
-        Orient.instance().registerListener(new OOrientListenerAbstract() {
-          @Override
-          public void onStorageRegistered(OStorage iStorage) {
+        Orient.instance().registerListener(new OOrientListener() {
+            public void onStorageRegistered(OStorage oStorage) {
 
-          }
+            }
 
-          @Override
-          public void onStorageUnregistered(OStorage iStorage) {
+            public void onStorageUnregistered(OStorage oStorage) {
 
-          }
+            }
 
-          @Override
-          public void onShutdown() {
-            db.drop();
-          }
-        });
+            public void onShutdown() {
+                db.drop();
+            }
+        } );
         while (true)
           Thread.sleep(1000);
       }
@@ -153,8 +151,7 @@ public abstract class BaseLuceneTest {
     String javaExec = System.getProperty("java.home") + "/bin/java";
     System.setProperty("ORIENTDB_HOME", buildDirectory);
 
-    ProcessBuilder processBuilder = new ProcessBuilder(javaExec, "-Xmx2048m", "-classpath", System.getProperty("java.class.path"),
-        "-DORIENTDB_HOME=" + buildDirectory, RemoteDBRunner.class.getName(), getDatabaseName());
+    ProcessBuilder processBuilder = new ProcessBuilder(javaExec, "-Xmx2048m", "-classpath", System.getProperty("java.class.path"), "-DORIENTDB_HOME=" + buildDirectory, "test", getDatabaseName()); //RemoteDBRunner.class.getName() //todo - what shoudl this return?
     processBuilder.inheritIO();
 
     process = processBuilder.start();

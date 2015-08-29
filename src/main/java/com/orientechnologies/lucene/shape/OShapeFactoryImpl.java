@@ -37,7 +37,6 @@ public class OShapeFactoryImpl implements OShapeFactory {
     registerFactory(Shape.class, new OPolygonShapeFactory());
   }
 
-  @Override
   public Shape makeShape(OCompositeKey key, SpatialContext ctx) {
     for (OShapeFactory f : factories.values()) {
       if (f.canHandle(key)) {
@@ -47,7 +46,6 @@ public class OShapeFactoryImpl implements OShapeFactory {
     return null;
   }
 
-  @Override
   public boolean canHandle(OCompositeKey key) {
     return false;
   }

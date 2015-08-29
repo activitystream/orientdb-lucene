@@ -23,7 +23,7 @@ import com.spatial4j.core.shape.Shape;
 
 
 public class OPointShapeFactory implements OShapeFactory {
-  @Override
+
   public Shape makeShape(OCompositeKey key, SpatialContext ctx) {
     double lat = ((Double) OType.convert(((OCompositeKey) key).getKeys().get(0), Double.class)).doubleValue();
     double lng = ((Double) OType.convert(((OCompositeKey) key).getKeys().get(1), Double.class)).doubleValue();
@@ -31,7 +31,6 @@ public class OPointShapeFactory implements OShapeFactory {
 
   }
 
-  @Override
   public boolean canHandle(OCompositeKey key) {
 
     boolean canHandle = key.getKeys().size() == 2;

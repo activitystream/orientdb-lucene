@@ -37,9 +37,8 @@ import com.orientechnologies.orient.core.type.tree.OMVRBTreeRIDSet;
 
 public class OLuceneFullTextIndex extends OIndexMultiValues implements OLuceneIndex {
 
-  public OLuceneFullTextIndex(String typeId, String algorithm, OLuceneIndexEngine indexEngine, String valueContainerAlgorithm,
-      ODocument metadata) {
-    super(typeId, algorithm, indexEngine, valueContainerAlgorithm, metadata);
+  public OLuceneFullTextIndex(String name, String typeId, String algorithm, OLuceneIndexEngine indexEngine, String valueContainerAlgorithm, ODocument metadata) {
+    super(name, typeId, algorithm, indexEngine, valueContainerAlgorithm, metadata);
     indexEngine.setIndexMetadata(metadata);
   }
 
@@ -145,17 +144,14 @@ public class OLuceneFullTextIndex extends OIndexMultiValues implements OLuceneIn
     return false;
   }
 
-  @Override
   public boolean supportsOrderedIterations() {
     return false;
   }
 
-  @Override
   public boolean canBeUsedInEqualityOperators() {
     return false;
   }
 
-  @Override
   protected void putInSnapshot(Object key, OIdentifiable value, Map<Object, Object> snapshot) {
     key = getCollatingValue(key);
 
@@ -164,7 +160,8 @@ public class OLuceneFullTextIndex extends OIndexMultiValues implements OLuceneIn
     Set<OIdentifiable> values;
     if (snapshotValue == null)
       values = null;
-    else if (snapshotValue.equals(RemovedValue.INSTANCE))
+    //else if (snapshotValue.equals())
+    else if (snapshotValue.equals("some")) //todo - RemovedValue.INSTANCE - what should this be?
       values = null;
     else
       values = (Set<OIdentifiable>) snapshotValue;

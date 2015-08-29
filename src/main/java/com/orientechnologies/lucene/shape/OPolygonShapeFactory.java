@@ -30,7 +30,7 @@ import java.text.ParseException;
  * Created by Enrico Risa (e.risa-at-orientechnologies.com) on 24/04/14.
  */
 public class OPolygonShapeFactory implements OShapeFactory {
-  @Override
+
   public Shape makeShape(OCompositeKey key, SpatialContext ctx) {
 
     SpatialContext ctx1 = JtsSpatialContext.GEO;
@@ -44,7 +44,6 @@ public class OPolygonShapeFactory implements OShapeFactory {
     return null;
   }
 
-  @Override
   public boolean canHandle(OCompositeKey key) {
     return false;
   }

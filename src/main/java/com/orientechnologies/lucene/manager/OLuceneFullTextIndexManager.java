@@ -16,6 +16,7 @@
 
 package com.orientechnologies.lucene.manager;
 
+import com.orientechnologies.common.log.OLogManager;
 import com.orientechnologies.lucene.OLuceneIndexType;
 import com.orientechnologies.lucene.collections.OFullTextCompositeKey;
 import com.orientechnologies.orient.core.command.OCommandContext;
@@ -24,6 +25,7 @@ import com.orientechnologies.orient.core.id.OContextualRecordId;
 import com.orientechnologies.orient.core.id.ORID;
 import com.orientechnologies.orient.core.index.*;
 import com.orientechnologies.orient.core.record.impl.ODocument;
+import com.orientechnologies.orient.core.serialization.serializer.stream.OStreamSerializer;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
@@ -52,46 +54,54 @@ public class OLuceneFullTextIndexManager extends OLuceneIndexManagerAbstract {
 
     Analyzer analyzer = getAnalyzer(metadata);
     Version version = getVersion(metadata);
-    IndexWriterConfig iwc = new IndexWriterConfig(version, analyzer);
+    IndexWriterConfig iwc = new IndexWriterConfig(analyzer);
     iwc.setOpenMode(IndexWriterConfig.OpenMode.CREATE_OR_APPEND);
+    iwc.setWriteLockTimeout(1000);
+
+    OLogManager.instance().info(this, "Creating Lucene index in '%s'...", directory);
+
     return new IndexWriter(directory, iwc);
+  }
+
+  public void create(OIndexDefinition indexDefinition, String clusterIndexName, OStreamSerializer valueSerializer, boolean isAutomatic) {
+      OLogManager.instance().debug(this, "Is this being called?");
+  }
+
+  public int getVersion() {
+    return 0;
   }
 
   @Override
   public IndexWriter openIndexWriter(Directory directory, ODocument metadata) throws IOException {
     Analyzer analyzer = getAnalyzer(metadata);
     Version version = getVersion(metadata);
-    IndexWriterConfig iwc = new IndexWriterConfig(version, analyzer);
+    IndexWriterConfig iwc = new IndexWriterConfig(analyzer);
     iwc.setOpenMode(IndexWriterConfig.OpenMode.APPEND);
+
+    OLogManager.instance().info(this, "Open Lucene index in '%s'...", directory);
     return new IndexWriter(directory, iwc);
   }
 
-  @Override
   public void init() {
 
   }
 
-  @Override
   public void deleteWithoutLoad(String indexName) {
 
   }
 
-  @Override
   public boolean contains(Object key) {
     return false;
   }
 
-  @Override
   public boolean remove(Object key) {
     return false;
   }
 
-  @Override
   public ORID getIdentity() {
     return null;
   }
 
-  @Override
   public Object get(Object key) {
     Query q = null;
 
@@ -107,7 +117,6 @@ public class OLuceneFullTextIndexManager extends OLuceneIndexManagerAbstract {
     }
   }
 
-  @Override
   public void put(Object key, Object value) {
     Set<OIdentifiable> container = (Set<OIdentifiable>) value;
     for (OIdentifiable oIdentifiable : container) {
@@ -167,48 +176,40 @@ public class OLuceneFullTextIndexManager extends OLuceneIndexManagerAbstract {
 
   }
 
-  @Override
   public Object getFirstKey() {
     return null;
   }
 
-  @Override
   public Object getLastKey() {
     return null;
   }
 
-  @Override
   public OIndexCursor iterateEntriesBetween(Object rangeFrom, boolean fromInclusive, Object rangeTo, boolean toInclusive,
       boolean ascSortOrder, ValuesTransformer transformer) {
     return null;
   }
 
-  @Override
   public OIndexCursor iterateEntriesMajor(Object fromKey, boolean isInclusive, boolean ascSortOrder, ValuesTransformer transformer) {
     return null;
   }
 
-  @Override
   public OIndexCursor iterateEntriesMinor(Object toKey, boolean isInclusive, boolean ascSortOrder, ValuesTransformer transformer) {
     return null;
   }
 
-  @Override
   public OIndexCursor cursor(ValuesTransformer valuesTransformer) {
     return null;
   }
 
-  @Override
   public OIndexKeyCursor keyCursor() {
     return new OIndexKeyCursor() {
-      @Override
+
       public Object next(int prefetchSize) {
         return null;
       }
     };
   }
 
-  @Override
   public boolean hasRangeQuerySupport() {
     return false;
   }
